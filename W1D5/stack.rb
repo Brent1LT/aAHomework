@@ -9,9 +9,7 @@ class Stack
   end
 
   def pop
-    el = stack[-1]
-    stack = stack[0...-1]
-    el
+    stack.pop
   end
 
   def peek
