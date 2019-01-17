@@ -63,12 +63,9 @@ end
   end
 
   describe "#make_more" do
-    before(:each) do
-      cake.make_more
-    end
     it "calls bake on the dessert's chef with the dessert passed in" do
-      allow(chef).to receive(:bake).and_return(:heat!)
-      expect(cake.temp).to eq(400)
+      expect(chef).to receive(:bake).with(cake)
+      cake.make_more
     end
   end
 end
