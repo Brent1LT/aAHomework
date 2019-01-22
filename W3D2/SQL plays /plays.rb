@@ -15,7 +15,7 @@ class Play
   attr_accessor :id, :title, :year, :playwright_id
 
   def self.find_by_title(title)
-    play = PlayDBConnection.instance.exectue(<<-SQL, title)
+    play = PlayDBConnection.instance.execute(<<-SQL, title)
     SELECT
       *
     FROM
@@ -27,8 +27,8 @@ class Play
     Play.new(play.first)
   end
 
-  def self.find_by_plarwright(playwright_id)
-    PlayDBConnection.instance.exectue(<<-SQL, playwright_id)
+  def self.find_by_playwright(playwright_id)
+    playwright = PlayDBConnection.instance.execute(<<-SQL, playwright_id)
     SELECT
       *
     FROM
@@ -36,6 +36,9 @@ class Play
     WHERE
       playwright_id = ?
     SQL
+
+    return nil unless playwright.length > 0
+    Playwright.new(playwright.first)
   end
 
   def self.all
@@ -85,7 +88,7 @@ class Playwright
   end
 
   def self.find_by_name(name)
-    PlayDBConnection.instance.exectue(<<-SQL, name)
+    PlayDBConnection.instance.execute(<<-SQL, name)
     SELECT
       *
     FROM
@@ -125,7 +128,7 @@ class Playwright
   end
 
   def get_plays(name)
-    PlayDBConnection.instance.execute(<<-SQL, name)
+    plays = PlayDBConnection.instance.execute(<<-SQL, name)
     SELECT
       title
     FROM
@@ -135,5 +138,7 @@ class Playwright
     WHERE
       playwrights.name = ?
     SQL
+    return nil unless plays.length > 0
+    plays.map {|play| Play.new(play)}
   end
 end
