@@ -16,18 +16,17 @@ class User < ApplicationRecord
   end 
 
   def reset_session_token!
-    session_token = User.generate_session_token
+    self.session_token = User.generate_session_token
     self.save!
     self.session_token
   end 
 
   def ensure_session_token
-    # reset_session_token! unless session_token
-    session_token ||= User.generate_session_token
+    self.session_token ||= User.generate_session_token
   end 
 
   def password=(value)
     @password = value 
-    password_digest = BCrypt::Password.create(password)
+    self.password_digest = BCrypt::Password.create(password)
   end 
 end
